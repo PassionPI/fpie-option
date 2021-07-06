@@ -1,10 +1,10 @@
 {
   "name": "fpie-option",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Option",
-  "main": "./src/index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/PassionPI/fpie-option/issues"
   },
-  "homepage": "https://github.com/PassionPI/fpie-option#readme"
+  "homepage": "https://github.com/PassionPI/fpie-option#readme",
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
 }

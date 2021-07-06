@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["esNEXT"],
+    "outDir": "./dist",
+    "target": "ESNext",
+    "module": "CommonJS",
+    "pretty": true,
+    "allowJs": true,
+    "declaration": true,
+  },
+  "include": ["./src/**/*", "./test/**/*"],
+  "exclude": ["./lib/**/*"]
+}
