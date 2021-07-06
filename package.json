@@ -1,8 +1,8 @@
 {
   "name": "fpie-option",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Option",
-  "main": "./dist/index.js",
+  "main": "./lib/index.js",
   "scripts": {
     "tsc": "tsc"
   },
