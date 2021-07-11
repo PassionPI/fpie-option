@@ -1,6 +1,6 @@
 {
   "name": "fpie-option",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Option",
   "main": "./lib/index.js",
   "scripts": {
