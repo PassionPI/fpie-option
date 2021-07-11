@@ -32,7 +32,9 @@ const Some: ISome = <T>(x: T): RSome<T> => {
 
 class P<X, T extends RSome<X>> extends Promise<T> {
   map = <R>(f: (x: X) => R): P<R, RSome<R>> =>
-    super.then((o) => o.map(f)) as any;
+    super
+      .then((o: any) => ((o = o.map(f)), isSome(o) ? o.join() : o))
+      .then(Some, None) as any;
 }
 
 const Task = <T>(f: TaskArg<T>): P<T, RSome<T>> =>
