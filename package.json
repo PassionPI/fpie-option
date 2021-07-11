@@ -1,6 +1,6 @@
 {
   "name": "fpie-option",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Option",
   "main": "./lib/index.js",
   "scripts": {
@@ -10,8 +10,13 @@
     "type": "git",
     "url": "git+https://github.com/PassionPI/fpie-option.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "option",
+    "monda",
+    "maybe",
+    "error catch"
+  ],
+  "author": "PassionPI",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/PassionPI/fpie-option/issues"
@@ -19,8 +24,5 @@
   "homepage": "https://github.com/PassionPI/fpie-option#readme",
   "devDependencies": {
     "typescript": "^4.3.5"
-  },
-  "dependencies": {
-    "fpie-option": "^0.0.3"
   }
 }

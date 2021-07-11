@@ -1,27 +1,7 @@
-interface INone {
-  (e?: any): RNone;
-}
-interface RNone {
-  type: INone;
-  join: () => any;
-  map: () => RNone;
-}
-interface ISome {
-  <T>(x: T): RSome<T>;
-}
-interface RSome<T> {
-  type: ISome;
-  join: () => T;
-  map: <R>(fn: (x: T) => R) => RSome<R>;
-}
-interface TaskArg<T> {
-  (res: (x: T) => void, rej: (x: any) => void): void;
-}
+import type { INone, ISome, RNone, RSome, TaskArg } from "./type";
 
-const isNil = (v: any) => v == null || Object.is(v, NaN);
-const isNone = (v: any) => v?.type === None;
-const isSome = (v: any) => v?.type === Some;
-const isOption = (v: any) => isNone(v) || isSome(v);
+const isNone = (v: any) => v?.type == None;
+const isSome = (v: any) => v?.type == Some;
 
 const None: INone = (e): RNone => {
   if (isNone(e)) return e;
@@ -35,30 +15,27 @@ const None: INone = (e): RNone => {
 };
 
 const Some: ISome = <T>(x: T): RSome<T> => {
-  if (isOption(x)) return x as any;
-  if (isNil(x)) return None();
-  const some: RSome<T> = {
+  if (isNone(x) || isSome(x)) return x as any;
+  if (x == null || Object.is(x, NaN)) return None();
+  return {
     type: Some,
     join: () => x,
-    map: (fn) => {
+    map: (f) => {
       try {
-        return Some(fn(x));
+        return Some(f(x));
       } catch (e) {
         return None(e);
       }
     },
   };
-  return some;
 };
 
-class TaskClass<X, T extends RSome<X>> extends Promise<T> {
-  map = <R>(fn: (x: X) => R): TaskClass<R, RSome<R>> =>
-    super
-      .then((v) => (isSome(v) ? (v as any).map(fn) : v))
-      .then(Some, None) as any;
+class P<X, T extends RSome<X>> extends Promise<T> {
+  map = <R>(f: (x: X) => R): P<R, RSome<R>> =>
+    super.then((o) => o.map(f)) as any;
 }
 
-const Task = <T>(fn: TaskArg<T>): TaskClass<T, RSome<T>> =>
-  new TaskClass(fn as any).then(Some, None) as any;
+const Task = <T>(f: TaskArg<T>): P<T, RSome<T>> =>
+  new P(f as any).then(Some, None) as any;
 
 export { Task, None, Some, isNone, isSome };
