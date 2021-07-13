@@ -1,4 +1,29 @@
-import type { INone, ISome, RNone, RSome, TaskArg } from "./type";
+interface INone {
+  (e?: any): RNone;
+}
+interface RNone {
+  type: INone;
+  join: () => any;
+  map: (any?: any) => RNone;
+}
+interface ISome {
+  <T>(x?: T): RSome<T extends RSome<infer U> ? U : T>;
+}
+interface RSome<T> {
+  type: ISome;
+  join: () => T;
+  map: <R>(fn: (x: T) => R) => RSome<R>;
+}
+interface TaskArg<T> {
+  (res: (x: T) => void, rej: (x: any) => void): void;
+}
+
+interface TaskMap<X> {
+  <R>(f: (x: X) => R): R extends P<infer U, RSome<infer U>>
+    ? P<U, RSome<U>>
+    : P<R, RSome<R>>;
+}
+
 
 const isNone = (v: any) => !!v && v.type == None;
 const isSome = (v: any) => !!v && v.type == Some;
@@ -29,13 +54,6 @@ const Some: ISome = (x) => {
     },
   } as any;
 };
-
-interface TaskMap<X> {
-  <R>(f: (x: X) => R): R extends P<infer U, RSome<infer U>>
-    ? P<U, RSome<U>>
-    : P<R, RSome<R>>;
-}
-
 class P<X, T extends RSome<X>> extends Promise<T> {
   map: TaskMap<X> = (f) =>
     super
