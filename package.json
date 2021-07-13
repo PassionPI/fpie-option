@@ -1,9 +1,11 @@
 {
   "name": "fpie-option",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Option",
   "main": "./dist/index.js",
-  "files": ["./dist/**"],
+  "files": [
+    "./dist/**"
+  ],
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "test": "jest",
