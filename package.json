@@ -4,7 +4,7 @@
   "description": "Option",
   "main": "./dist/index.js",
   "files": [
-    "./dist/**"
+    "dist/**/*"
   ],
   "scripts": {
     "build": "rm -rf ./dist && tsc",
@@ -34,6 +34,7 @@
     "@babel/preset-typescript": "^7.14.5",
     "@types/jest": "^26.0.24",
     "babel-jest": "^27.0.6",
+    "fpie-option": "^0.0.10",
     "jest": "^27.0.6",
     "typescript": "^4.3.5"
   }
