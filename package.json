@@ -4,7 +4,9 @@
   "description": "Option",
   "main": "./lib/index.js",
   "scripts": {
-    "tsc": "tsc"
+    "build": "tsc",
+    "test": "jest",
+    "pub": "git add . && git commit -m 'npm publish' && npm run build && npm version patch && npm publish"
   },
   "repository": {
     "type": "git",
@@ -14,7 +16,8 @@
     "option",
     "monda",
     "maybe",
-    "error catch"
+    "error catch",
+    "typescript"
   ],
   "author": "PassionPI",
   "license": "ISC",
@@ -23,6 +26,12 @@
   },
   "homepage": "https://github.com/PassionPI/fpie-option#readme",
   "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
+    "@babel/preset-typescript": "^7.14.5",
+    "@types/jest": "^26.0.24",
+    "babel-jest": "^27.0.6",
+    "jest": "^27.0.6",
     "typescript": "^4.3.5"
   }
 }
