@@ -4,7 +4,7 @@
   "description": "Option",
   "main": "./lib/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf ./lib && tsc",
     "test": "jest",
     "pub": "git add . && git commit -m 'npm publish' && npm run build && npm version patch && npm publish"
   },

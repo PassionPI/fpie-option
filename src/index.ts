@@ -1,8 +1,7 @@
-import { P } from "./baseTask";
 import type { INone, ISome, RNone, RSome, TaskArg } from "./type";
 
-const isNone = (v: any) => v?.type == None;
-const isSome = (v: any) => v?.type == Some;
+const isNone = (v: any) => !!v && v.type == None;
+const isSome = (v: any) => !!v && v.type == Some;
 
 const None: INone = (e): RNone => {
   if (isNone(e)) return e;
@@ -30,6 +29,19 @@ const Some: ISome = (x) => {
     },
   } as any;
 };
+
+interface TaskMap<X> {
+  <R>(f: (x: X) => R): R extends P<infer U, RSome<infer U>>
+    ? P<U, RSome<U>>
+    : P<R, RSome<R>>;
+}
+
+class P<X, T extends RSome<X>> extends Promise<T> {
+  map: TaskMap<X> = (f) =>
+    super
+      .then((o: any) => ((o = o.map(f)), isSome(o) ? o.join() : o))
+      .then(Some, None) as any;
+}
 
 const Task = <T>(f: TaskArg<T>): P<T, RSome<T>> =>
   new P(f as any).then(Some, None) as any;
