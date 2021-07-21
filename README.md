@@ -6,6 +6,7 @@ fpie-option 是一个类`Monda`容器，提供了空值判断与错误捕获，�
 
 ```js
 import { Some, isSome, None, isNone, Task } from "fpie-option";
+import { Ok, isOk, Err, isErr, Step } from "fpie-option";
 ```
 
 ## Some;
@@ -112,3 +113,11 @@ async () => {
   await Task((res, rej) => rej(1)).map((v) => v + 1); // 返回 None(1)
 };
 ```
+
+## Ok, isOk, Err, isErr, Step
+
+依次对应参考`Some`, `isSome`, `None`, `isNone`, `Task`
+
+区别为，当`Ok`值为`null`或`undefined`或`NaN`时，并不会转换为`Err`
+
+其余一致

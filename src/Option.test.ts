@@ -129,6 +129,10 @@ test("Task err", async () => {
   expect(err6).toBe(err5);
   expect(err6.join()).toBe('j1');
   expect(isNone(err6)).toBe(true);
+
+  const err7 = await Task<number>((s) => s(1)).map(() => { }) as any;
+  expect(err7.join()).toBe(undefined);
+  expect(isNone(err7)).toBe(true);
 })
 
 test("Task nest", async () => {
