@@ -1,6 +1,6 @@
 {
   "name": "fpie-option",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Option",
   "main": "./dist/index.js",
   "files": [
