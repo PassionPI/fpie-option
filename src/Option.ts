@@ -31,28 +31,28 @@ const isSome = (v: any) => !!v && v.type == Some;
 const None: INone = (e): RNone => {
   if (isNone(e)) return e;
   if (isSome(e)) return None(e.join());
-  const none = {
+  const none = Object.freeze({
     type: None,
     join: () => e,
     map: () => none,
-  };
+  });
   return none;
 };
 
 const Some: ISome = (x) => {
   if (isNone(x) || isSome(x)) return x as any;
   if (x == null || Object.is(x, NaN)) return None();
-  return {
+  return Object.freeze({
     type: Some,
     join: () => x,
     map: (f, g) => {
       try {
         return Some(f(x));
       } catch (e) {
-        return typeof g === 'function' ? Some(e).map(g) : None(e);
+        return g ? Some(e).map(g) : None(e);
       }
     },
-  } as any;
+  }) as any;
 };
 class P<X, T extends RSome<X>> extends Promise<T> {
   map: TaskMap<X> = (f, g) =>

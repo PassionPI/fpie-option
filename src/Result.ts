@@ -48,7 +48,7 @@ const Ok: IOk = (x) => {
       try {
         return Ok(f(x));
       } catch (e) {
-        return typeof g === 'function' ? Ok(e).map(g) : Err(e);
+        return g ? Ok(e).map(g) : Err(e);
       }
     },
   }) as any;

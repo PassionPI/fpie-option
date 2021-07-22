@@ -78,7 +78,28 @@ Some(1).map(() => {
 }); // 返回 None('err')
 ```
 
-3. `Some`和`None`具有相同接口，故不用考虑其相互转换的情况，只需在最后`join`取值之前，判断类型即可。
+3. `Some`的错误捕获
+
+若想在`map`方法中处理错误，可以传入第二个参数，用于捕获错误
+
+```js
+Some(1).map(
+  () => {
+    throw "err";
+  },
+  () => "catch err"
+); // 返回 Some('catch err')
+Some(1).map(
+  () => {
+    throw "err";
+  },
+  () => {
+    throw "catch err failed";
+  }
+); // 返回 None('catch err failed')
+```
+
+4. `Some`和`None`具有相同接口，故不用考虑其相互转换的情况，只需在最后`join`取值之前，判断类型即可。
 
 ## Task;
 
