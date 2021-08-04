@@ -9,7 +9,7 @@ import { Some, isSome, None, isNone, Task } from "fpie-option";
 import { Ok, isOk, Err, isErr, Step } from "fpie-option";
 ```
 
-## Some;
+## `Some`
 
 此状态代表正常
 
@@ -31,7 +31,7 @@ Some(1).map((x) => x + 1); // 返回 Some(2)
 Some(1).join(); // 返回 1
 ```
 
-## None;
+## `None`
 
 此状态代表`null`或`Error`
 
@@ -57,7 +57,7 @@ None(1).join(); // 返回 1
 >
 > 报错`Error`时 `None('err msg').join()` 返回错误信息
 
-## Some & None;
+## `Some` & `None`
 
 1. `Some`和`None`均不会产生嵌套，也不会互相存储
 
@@ -101,7 +101,7 @@ Some(1).map(
 
 4. `Some`和`None`具有相同接口，故不用考虑其相互转换的情况，只需在最后`join`取值之前，判断类型即可。
 
-## Task;
+## `Task`
 
 基于`Promise`，封装`Some`和`None`
 
@@ -110,6 +110,23 @@ Task((res, rej) => res(1));
 // 等价于
 new Promise((res, rej) => res(1)).then(Some, None);
 // 返回Promise<Some(1)>
+```
+
+```js
+Task.resolve(1);
+// 等价于
+Promise.resolve(1).then(Some, None);
+// 返回Promise<Some(1)>
+
+Task.reject(1);
+// 等价于
+Promise.reject(1);
+// 抛出 Error
+
+Task.reject(1).map();
+// 等价于
+Promise.reject(1).then(Some, None);
+// 返回Promise<None(1)>
 ```
 
 ```js
@@ -135,7 +152,7 @@ async () => {
 };
 ```
 
-## Ok, isOk, Err, isErr, Step
+## `Ok`, `isOk`, `Err`, `isErr`, `Step`
 
 依次对应参考`Some`, `isSome`, `None`, `isNone`, `Task`
 

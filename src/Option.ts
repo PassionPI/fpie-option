@@ -17,11 +17,13 @@ interface RSome<T> {
 interface TaskArg<T> {
   (res: (x: T) => void, rej: (x: any) => void): void;
 }
+type Chain<T> = T extends P<infer U, RSome<infer U>> | Promise<infer U>
+  ? P<U, RSome<U>>
+  : P<T, RSome<T>>
+
 
 interface TaskMap<X> {
-  <R>(f: (x: X) => R, g?: (x?: any) => R): R extends P<infer U, RSome<infer U>>
-    ? P<U, RSome<U>>
-    : P<R, RSome<R>>;
+  <R>(f: (x: X) => R, g?: (x?: any) => R): Chain<R>;
 }
 
 
@@ -61,7 +63,9 @@ class P<X, T extends RSome<X>> extends Promise<T> {
       .then(Some, None) as any;
 }
 
-const Task = <T>(f: TaskArg<T>): P<T, RSome<T>> =>
+const Task = <T>(f: TaskArg<T>): Chain<T> =>
   new P(f as any).then(Some, None) as any;
+Task.resolve = <T>(x: T): Chain<T> => P.resolve(x) as any
+Task.reject = <T>(x: T): P<T, RNone> => P.reject(x) as any
 
 export { Task, None, Some, isNone, isSome };
