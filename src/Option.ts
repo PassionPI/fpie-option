@@ -12,7 +12,7 @@ interface ISome {
 interface RSome<T> {
   type: ISome;
   join: () => T;
-  map: <R>(fn: (x: T) => R, g?: (x?: any) => R) => RSome<R>;
+  map: <R>(fn: (x: T) => R, g?: (x?: any) => any) => RSome<R>;
 }
 interface TaskArg<T> {
   (res: (x: T) => void, rej: (x: any) => void): void;
@@ -23,7 +23,7 @@ type Chain<T> = T extends P<infer U, RSome<infer U>> | Promise<infer U>
 
 
 interface TaskMap<X> {
-  <R>(f: (x: X) => R, g?: (x?: any) => R): Chain<R>;
+  <R>(f: (x: X) => R, g?: (x?: any) => any): Chain<R>;
 }
 
 
@@ -33,18 +33,18 @@ const isSome = (v: any) => !!v && v.type == Some;
 const None: INone = (e): RNone => {
   if (isNone(e)) return e;
   if (isSome(e)) return None(e.join());
-  const none = Object.freeze({
+  const none = {
     type: None,
     join: () => e,
     map: () => none,
-  });
+  };
   return none;
 };
 
 const Some: ISome = (x) => {
   if (isNone(x) || isSome(x)) return x as any;
   if (x == null || Object.is(x, NaN)) return None();
-  return Object.freeze({
+  return {
     type: Some,
     join: () => x,
     map: (f, g) => {
@@ -54,12 +54,13 @@ const Some: ISome = (x) => {
         return g ? Some(e).map(g) : None(e);
       }
     },
-  }) as any;
+  } as any;
 };
 class P<X, T extends RSome<X>> extends Promise<T> {
   map: TaskMap<X> = (f, g) =>
     super
-      .then((o: any) => ((o = o.map(f, g)), isSome(o) ? o.join() : o))
+      .then(o => o.map(f, g))
+      .then(o => isSome(o) ? o.join() : o)
       .then(Some, None) as any;
 }
 

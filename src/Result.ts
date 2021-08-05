@@ -12,7 +12,7 @@ interface IOk {
 interface ROk<T> {
   type: IOk;
   join: () => T;
-  map: <R>(f: (x: T) => R, g?: (x?: any) => R) => ROk<R>;
+  map: <R>(f: (x: T) => R, g?: (x?: any) => any) => ROk<R>;
 }
 interface StepArg<T> {
   (res: (x: T) => void, rej: (x: any) => void): void;
@@ -23,7 +23,7 @@ type Chain<T> = T extends P<infer U, ROk<infer U>> | Promise<infer U>
   : P<T, ROk<T>>
 
 interface StepMap<X> {
-  <R>(f: (x: X) => R, g?: (x?: any) => R): Chain<R>;
+  <R>(f: (x: X) => R, g?: (x?: any) => any): Chain<R>;
 }
 
 
@@ -33,17 +33,17 @@ const isOk = (v: any) => !!v && v.type == Ok;
 const Err: IErr = (e): RErr => {
   if (isErr(e)) return e;
   if (isOk(e)) return Err(e.join());
-  const err = Object.freeze({
+  const err = {
     type: Err,
     join: () => e,
     map: () => err,
-  });
+  };
   return err;
 };
 
 const Ok: IOk = (x) => {
   if (isErr(x) || isOk(x)) return x as any;
-  return Object.freeze({
+  return {
     type: Ok,
     join: () => x,
     map: (f, g) => {
@@ -53,12 +53,13 @@ const Ok: IOk = (x) => {
         return g ? Ok(e).map(g) : Err(e);
       }
     },
-  }) as any;
+  } as any;
 };
 class P<X, T extends ROk<X>> extends Promise<T> {
   map: StepMap<X> = (f, g) =>
     super
-      .then((o: any) => ((o = o.map(f, g)), isOk(o) ? o.join() : o))
+      .then(o => o.map(f, g))
+      .then(o => isOk(o) ? o.join() : o)
       .then(Ok, Err) as any;
 }
 
