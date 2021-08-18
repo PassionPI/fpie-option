@@ -26,6 +26,8 @@ interface TaskMap<X> {
   <R>(f: (x: X) => R, g?: (x?: any) => any): Chain<R>;
 }
 
+type RTask<T> = P<T, RSome<T>>
+
 
 const isNone = (v: any) => !!v && v.type == None;
 const isSome = (v: any) => !!v && v.type == Some;
@@ -66,7 +68,7 @@ class P<X, T extends RSome<X>> extends Promise<T> {
 
 const Task = <T>(f: TaskArg<T>): Chain<T> =>
   new P(f as any).then(Some, None) as any;
-Task.resolve = <T>(x: T): Chain<T> => P.resolve(x) as any
-Task.reject = <T>(x: T): P<T, RNone> => P.reject(x) as any
+Task.resolve = <T>(x: T): Chain<T> => P.resolve(x).then(Some, None) as any
+Task.reject = <T>(x: T): P<T, RNone> => P.reject(x).then(Some, None) as any
 
-export { Task, None, Some, isNone, isSome };
+export { Task, None, Some, isNone, isSome, RNone, RSome, RTask };

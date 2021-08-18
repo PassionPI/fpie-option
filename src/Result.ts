@@ -26,6 +26,8 @@ interface StepMap<X> {
   <R>(f: (x: X) => R, g?: (x?: any) => any): Chain<R>;
 }
 
+type RStep<T> = P<T, ROk<T>>
+
 
 const isErr = (v: any) => !!v && v.type == Err;
 const isOk = (v: any) => !!v && v.type == Ok;
@@ -65,7 +67,7 @@ class P<X, T extends ROk<X>> extends Promise<T> {
 
 const Step = <T>(f: StepArg<T>): Chain<T> =>
   new P(f as any).then(Ok, Err) as any;
-Step.resolve = <T>(x: T): Chain<T> => P.resolve(x) as any
-Step.reject = <T>(x: T): P<T, RErr> => P.reject(x) as any
+Step.resolve = <T>(x: T): Chain<T> => P.resolve(x).then(Ok, Err) as any
+Step.reject = <T>(x: T): P<T, RErr> => P.reject(x).then(Ok, Err) as any
 
-export { Step, Err, Ok, isErr, isOk };
+export { Step, Err, Ok, isErr, isOk, ROk, RErr, RStep };
