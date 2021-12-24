@@ -12,7 +12,7 @@ interface IOk {
 interface ROk<T> {
   type: IOk;
   join: () => T;
-  map: <R>(f: (x: T) => R, g?: (x?: any) => any) => ROk<R>;
+  map: <R>(f: (x: T) => R, g?: (x?: any) => any) => ROk<R extends ROk<infer U> ? U : R>;
 }
 interface StepArg<T> {
   (res: (x: T) => void, rej: (x: any) => void): void;

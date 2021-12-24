@@ -1,5 +1,7 @@
+// import { Task } from "./index";
 import { Task, None, Some, isNone, isSome } from "./index";
-
+// import { okCreate, err as None, isErr as isNone, isOk as isSome } from './Either'
+// const Some = okCreate(v => v == null || Object.is(v, NaN))
 const some_1 = Some(1);
 const some_null = Some();
 const some_nest = Some(some_1);
